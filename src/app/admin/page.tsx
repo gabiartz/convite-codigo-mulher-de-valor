@@ -11,7 +11,6 @@ const supabase = createClient(
 
 interface Convite {
   id: number
-  created_at: string
   nome: string
   telefone: string
   codigo: string
@@ -29,7 +28,7 @@ export default function AdminPage() {
     const { data, error } = await supabase
       .from('convites_mulher_de_valor')
       .select('*')
-      .order('created_at', { ascending: false })
+      .order('id', { ascending: false })
 
     if (error) {
       console.error('Erro ao buscar convites:', error.message, error.code, error.hint)
@@ -45,12 +44,11 @@ export default function AdminPage() {
   }, [])
 
   const exportCSV = () => {
-    const headers = ['Nome', 'Telefone', 'Código', 'Data de Cadastro']
+    const headers = ['Nome', 'Telefone', 'Código']
     const rows = convites.map(c => [
       c.nome,
       c.telefone,
-      c.codigo,
-      new Date(c.created_at).toLocaleString('pt-BR')
+      c.codigo
     ])
 
     const csv = [headers, ...rows].map(row => row.join(',')).join('\n')
@@ -60,16 +58,6 @@ export default function AdminPage() {
     a.href = url
     a.download = `convites-vip-mulher-de-valor-${new Date().toISOString().split('T')[0]}.csv`
     a.click()
-  }
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
   }
 
   return (
@@ -167,7 +155,6 @@ export default function AdminPage() {
                     <th className="text-left px-6 py-4 text-sm font-semibold" style={{ color: marinho }}>Nome</th>
                     <th className="text-left px-6 py-4 text-sm font-semibold" style={{ color: marinho }}>Telefone</th>
                     <th className="text-left px-6 py-4 text-sm font-semibold" style={{ color: marinho }}>Código</th>
-                    <th className="text-left px-6 py-4 text-sm font-semibold" style={{ color: marinho }}>Data</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -191,7 +178,6 @@ export default function AdminPage() {
                           {convite.codigo}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-gray-500">{formatDate(convite.created_at)}</td>
                     </tr>
                   ))}
                 </tbody>
