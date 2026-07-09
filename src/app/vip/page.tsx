@@ -101,6 +101,22 @@ export default function ConviteVIPPage() {
     setIsSubmitting(true)
 
     const codigo = `VIP-${Date.now().toString(36).toUpperCase()}`
+
+    try {
+      // Salvar no Supabase
+      const response = await fetch('/api/convite-vip', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, telefone, codigo })
+      })
+
+      if (!response.ok) {
+        console.error('Erro ao salvar convite')
+      }
+    } catch (error) {
+      console.error('Erro ao salvar:', error)
+    }
+
     const qrData = JSON.stringify({
       evento: 'O Código da Mulher de Valor',
       nome: nome,
@@ -109,8 +125,6 @@ export default function ConviteVIPPage() {
       codigo: codigo,
       data: '18/07/2026'
     })
-
-    await new Promise(resolve => setTimeout(resolve, 1500))
 
     setQrCodeData(encodeURIComponent(qrData))
     setShowQRCode(true)
