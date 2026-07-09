@@ -5,8 +5,8 @@ import { createClient } from '@supabase/supabase-js'
 import { Users, Download, RefreshCw, Crown, Phone, Calendar } from 'lucide-react'
 
 const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  'https://ygddgjishoquotpbvubi.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnZGRnamlzaG9xdW90cGJ2dWJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0OTY3MTEsImV4cCI6MjA5ODA3MjcxMX0.MjER56cSvjHSHJLyzcSQZwgpu2549NJkCmPno2CnHqs'
 )
 
 interface Convite {

@@ -66,7 +66,7 @@ function useCountdown(targetDate: Date): TimeLeft | null {
 // ============================================================================
 
 const supabase = createClient(
-  'https://ygddgjishoqvotpbvubi.supabase.co',
+  'https://ygddgjishoquotpbvubi.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnZGRnamlzaG9xdW90cGJ2dWJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0OTY3MTEsImV4cCI6MjA5ODA3MjcxMX0.MjER56cSvjHSHJLyzcSQZwgpu2549NJkCmPno2CnHqs'
 )
 
