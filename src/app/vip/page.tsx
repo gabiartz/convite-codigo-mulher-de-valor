@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { createClient } from '@supabase/supabase-js'
 import {
   Calendar,
   Clock,
@@ -64,6 +65,11 @@ function useCountdown(targetDate: Date): TimeLeft | null {
 // MAIN COMPONENT
 // ============================================================================
 
+const supabase = createClient(
+  'https://ygddgjishoqvotpbvubi.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnZGRnamlzaG9xdW90cGJ2dWJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0OTY3MTEsImV4cCI6MjA5ODA3MjcxMX0.MjER56cSvjHSHJLyzcSQZwgpu2549NJkCmPno2CnHqs'
+)
+
 export default function ConviteVIPPage() {
   const eventDate = new Date('2026-07-18T09:00:00')
   const timeLeft = useCountdown(eventDate)
@@ -104,21 +110,17 @@ export default function ConviteVIPPage() {
 
     const codigo = `VIP-${Date.now().toString(36).toUpperCase()}`
 
-    // Salvar via API route
+    // Salvar direto no Supabase
     try {
-      const response = await fetch('/api/convite-vip', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nome, telefone, codigo })
-      })
+      const { error } = await supabase
+        .from('convites_mulher_de_valor')
+        .insert([{ nome, telefone, codigo }])
 
-      const data = await response.json()
-
-      if (!response.ok) {
-        setErro(`${data.error} - ${data.details || ''} ${data.hint || ''} ${data.code || ''}`)
+      if (error) {
+        setErro(`${error.message} - ${error.hint || ''} - ${error.code || ''}`)
       }
-    } catch (error) {
-      setErro(`Erro de conexão: ${error}`)
+    } catch (error: any) {
+      setErro(`Erro: ${error?.message || error}`)
     }
 
     const qrData = JSON.stringify({
