@@ -110,6 +110,11 @@ export default function ConviteVIPPage() {
 
     const codigo = `VIP-${Date.now().toString(36).toUpperCase()}`
 
+    console.log('=== INICIANDO CADASTRO ===')
+    console.log('Nome:', nome)
+    console.log('Telefone:', telefone)
+    console.log('Código:', codigo)
+
     // Salvar direto no Supabase
     try {
       const { data, error } = await supabase
