@@ -115,7 +115,7 @@ export default function ConviteVIPPage() {
       const data = await response.json()
 
       if (!response.ok) {
-        setErro(`Erro: ${data.error || data.details || 'Falha ao salvar'}`)
+        setErro(`${data.error} - ${data.details || ''} ${data.hint || ''} ${data.code || ''}`)
       }
     } catch (error) {
       setErro(`Erro de conexão: ${error}`)

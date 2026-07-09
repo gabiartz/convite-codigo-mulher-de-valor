@@ -26,16 +26,16 @@ export async function POST(request: NextRequest) {
     if (error) {
       console.error('Erro ao salvar convite:', error)
       return NextResponse.json(
-        { error: 'Erro ao salvar convite', details: error.message },
+        { error: 'Erro ao salvar convite', details: error.message, code: error.code, hint: error.hint },
         { status: 500 }
       )
     }
 
     return NextResponse.json({ success: true, data })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erro na API:', error)
     return NextResponse.json(
-      { error: 'Erro interno do servidor' },
+      { error: 'Erro interno do servidor', details: error?.message || String(error) },
       { status: 500 }
     )
   }
