@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { data, error } = await supabase
-      .from('confirmations')
+      .from('convites_mulher_de_valor')
       .insert([{ nome, telefone, codigo }])
       .select()
 

@@ -27,7 +27,7 @@ export default function AdminPage() {
   const fetchConvites = async () => {
     setLoading(true)
     const { data, error } = await supabase
-      .from('confirmations')
+      .from('convites_mulher_de_valor')
       .select('*')
       .order('created_at', { ascending: false })
 
