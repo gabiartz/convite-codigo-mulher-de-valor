@@ -74,6 +74,7 @@ export default function ConviteVIPPage() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showQRCode, setShowQRCode] = useState(false)
   const [qrCodeData, setQrCodeData] = useState('')
+  const [erro, setErro] = useState('')
 
   // Theme colors - Paleta original Adriane Zago
   const dourado = '#D9B44C'
@@ -99,6 +100,7 @@ export default function ConviteVIPPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
+    setErro('')
 
     const codigo = `VIP-${Date.now().toString(36).toUpperCase()}`
 
@@ -110,12 +112,13 @@ export default function ConviteVIPPage() {
         body: JSON.stringify({ nome, telefone, codigo })
       })
 
+      const data = await response.json()
+
       if (!response.ok) {
-        const data = await response.json()
-        console.error('Erro ao salvar:', data.error)
+        setErro(`Erro: ${data.error || data.details || 'Falha ao salvar'}`)
       }
     } catch (error) {
-      console.error('Erro ao salvar:', error)
+      setErro(`Erro de conexão: ${error}`)
     }
 
     const qrData = JSON.stringify({
@@ -608,6 +611,10 @@ export default function ConviteVIPPage() {
                     )}
                   </button>
                 </form>
+
+                {erro && (
+                  <p className="text-red-500 text-sm mb-4 p-3 bg-red-50 rounded-lg">{erro}</p>
+                )}
 
                 <p className="text-xs text-gray-400">
                   Ao retirar seu convite, você receberá um QR Code exclusivo para apresentar na entrada do evento.
