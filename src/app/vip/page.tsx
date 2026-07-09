@@ -112,15 +112,20 @@ export default function ConviteVIPPage() {
 
     // Salvar direto no Supabase
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('convites_mulher_de_valor')
         .insert([{ nome, telefone, codigo }])
+        .select()
 
       if (error) {
         setErro(`${error.message} - ${error.hint || ''} - ${error.code || ''}`)
+        console.error('Erro Supabase:', error)
+      } else {
+        console.log('Salvo com sucesso:', data)
       }
     } catch (error: any) {
       setErro(`Erro: ${error?.message || error}`)
+      console.error('Erro catch:', error)
     }
 
     const qrData = JSON.stringify({
