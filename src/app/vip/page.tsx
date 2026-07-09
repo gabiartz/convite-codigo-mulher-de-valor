@@ -112,7 +112,7 @@ export default function ConviteVIPPage() {
     // Salvar direto no Supabase (client-side)
     try {
       const { error } = await supabase
-        .from('convites_mulher_de_valor')
+        .from('confirmations')
         .insert([{ nome, telefone, codigo }])
 
       if (error) {
