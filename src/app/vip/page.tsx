@@ -457,8 +457,8 @@ export default function ConviteVIPPage() {
                   <p className="text-4xl md:text-5xl font-bold mb-2" style={{ color: `${marinho}40` }}>
                     <span className="line-through">R$ 697</span>
                   </p>
-                  <p className="text-2xl font-bold" style={{ color: dourado }}>CORTESIA</p>
-                  <p className="text-sm text-gray-500 mt-2">Você não paga nada</p>
+                  <p className="text-2xl font-bold" style={{ color: dourado }}>ACESSO VIP</p>
+                  <p className="text-sm text-gray-500 mt-2">(convidada)</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4 mb-8">
