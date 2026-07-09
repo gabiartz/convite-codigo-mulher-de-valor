@@ -10,7 +10,6 @@ const supabase = createClient(
 )
 
 interface Convite {
-  id: number
   nome: string
   telefone: string
   codigo: string
@@ -28,7 +27,6 @@ export default function AdminPage() {
     const { data, error } = await supabase
       .from('convites_mulher_de_valor')
       .select('*')
-      .order('id', { ascending: false })
 
     if (error) {
       console.error('Erro ao buscar convites:', error.message, error.code, error.hint)
@@ -159,7 +157,7 @@ export default function AdminPage() {
                 </thead>
                 <tbody>
                   {convites.map((convite, index) => (
-                    <tr key={convite.id} className="border-t hover:bg-gray-50" style={{ borderColor: '#eee' }}>
+                    <tr key={convite.codigo} className="border-t hover:bg-gray-50" style={{ borderColor: '#eee' }}>
                       <td className="px-6 py-4 text-gray-500">{index + 1}</td>
                       <td className="px-6 py-4 font-medium" style={{ color: marinho }}>{convite.nome}</td>
                       <td className="px-6 py-4">
