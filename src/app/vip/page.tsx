@@ -132,21 +132,106 @@ export default function ConviteVIPPage() {
   }
 
   const handleDownload = async () => {
-    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${qrCodeData}`
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${qrCodeData}`
+
     try {
-      const response = await fetch(qrUrl)
-      const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `convite-vip-${nome.replace(/\s+/g, '-').toLowerCase()}.png`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      window.URL.revokeObjectURL(url)
+      // Carregar QR Code
+      const qrImg = new Image()
+      qrImg.crossOrigin = 'anonymous'
+
+      await new Promise((resolve, reject) => {
+        qrImg.onload = resolve
+        qrImg.onerror = reject
+        qrImg.src = qrUrl
+      })
+
+      // Criar canvas
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')!
+
+      // Tamanho do convite
+      canvas.width = 600
+      canvas.height = 900
+
+      // Cores
+      const douradoCanvas = '#D9B44C'
+      const marinhoCanvas = '#1a2744'
+
+      // Fundo marinho
+      ctx.fillStyle = marinhoCanvas
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      // Faixa dourada no topo
+      ctx.fillStyle = douradoCanvas
+      ctx.fillRect(0, 0, canvas.width, 8)
+
+      // Badge VIP
+      ctx.fillStyle = douradoCanvas
+      ctx.beginPath()
+      ctx.roundRect(200, 40, 200, 40, 20)
+      ctx.fill()
+      ctx.fillStyle = marinhoCanvas
+      ctx.font = 'bold 16px Inter, sans-serif'
+      ctx.textAlign = 'center'
+      ctx.fillText('CONVITE VIP', 300, 67)
+
+      // Título
+      ctx.fillStyle = '#FFFFFF'
+      ctx.font = 'bold 32px Inter, sans-serif'
+      ctx.textAlign = 'center'
+      ctx.fillText('O Código da', 300, 130)
+      ctx.fillStyle = douradoCanvas
+      ctx.font = 'bold 38px Inter, sans-serif'
+      ctx.fillText('Mulher de Valor', 300, 175)
+
+      // Nome da convidada
+      ctx.fillStyle = '#FFFFFF'
+      ctx.font = '18px Inter, sans-serif'
+      ctx.fillText('Convidada Especial', 300, 230)
+      ctx.font = 'bold 28px Inter, sans-serif'
+      ctx.fillStyle = douradoCanvas
+      ctx.fillText(nome.toUpperCase(), 300, 270)
+
+      // Caixa branca para QR Code
+      ctx.fillStyle = '#FFFFFF'
+      ctx.beginPath()
+      ctx.roundRect(125, 310, 350, 350, 20)
+      ctx.fill()
+
+      // QR Code
+      ctx.drawImage(qrImg, 150, 335, 300, 300)
+
+      // Informações do evento
+      ctx.fillStyle = '#FFFFFF'
+      ctx.font = 'bold 20px Inter, sans-serif'
+      ctx.fillText('18 de Julho de 2026', 300, 710)
+      ctx.font = '16px Inter, sans-serif'
+      ctx.fillStyle = 'rgba(255,255,255,0.8)'
+      ctx.fillText('Sábado • 9h às 19h', 300, 740)
+
+      ctx.font = 'bold 18px Inter, sans-serif'
+      ctx.fillStyle = douradoCanvas
+      ctx.fillText('Hotel Wyndham Ibirapuera', 300, 780)
+      ctx.font = '14px Inter, sans-serif'
+      ctx.fillStyle = 'rgba(255,255,255,0.6)'
+      ctx.fillText('Av. Ibirapuera, 2907 - Moema, São Paulo', 300, 805)
+
+      // Faixa dourada no rodapé
+      ctx.fillStyle = douradoCanvas
+      ctx.fillRect(0, 850, canvas.width, 50)
+      ctx.fillStyle = marinhoCanvas
+      ctx.font = 'bold 14px Inter, sans-serif'
+      ctx.fillText('Apresente este QR Code na entrada do evento', 300, 880)
+
+      // Download
+      const link = document.createElement('a')
+      link.download = `convite-vip-${nome.replace(/\s+/g, '-').toLowerCase()}.png`
+      link.href = canvas.toDataURL('image/png')
+      link.click()
     } catch (error) {
-      // Fallback: abrir em nova aba
-      window.open(qrUrl, '_blank')
+      // Fallback: baixar só o QR Code
+      const qrUrlFallback = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${qrCodeData}`
+      window.open(qrUrlFallback, '_blank')
     }
   }
 
