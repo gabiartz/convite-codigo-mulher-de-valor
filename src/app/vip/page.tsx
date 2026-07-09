@@ -18,7 +18,9 @@ import {
   BookOpen,
   Crown,
   User,
-  Phone
+  Phone,
+  Download,
+  Share2
 } from 'lucide-react'
 
 // ============================================================================
@@ -113,6 +115,45 @@ export default function ConviteVIPPage() {
     setQrCodeData(encodeURIComponent(qrData))
     setShowQRCode(true)
     setIsSubmitting(false)
+  }
+
+  const handleDownload = async () => {
+    const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=${qrCodeData}`
+    try {
+      const response = await fetch(qrUrl)
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `convite-vip-${nome.replace(/\s+/g, '-').toLowerCase()}.png`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      window.URL.revokeObjectURL(url)
+    } catch (error) {
+      // Fallback: abrir em nova aba
+      window.open(qrUrl, '_blank')
+    }
+  }
+
+  const handleShare = async () => {
+    const shareData = {
+      title: 'Meu Convite VIP - O Código da Mulher de Valor',
+      text: `Olá! Confirmo minha presença no evento "O Código da Mulher de Valor" no dia 18/07/2026. Convite VIP de ${nome}.`,
+      url: window.location.href
+    }
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData)
+      } catch (error) {
+        // Usuário cancelou ou erro
+      }
+    } else {
+      // Fallback: copiar link
+      navigator.clipboard.writeText(window.location.href)
+      alert('Link copiado para a área de transferência!')
+    }
   }
 
   return (
@@ -492,6 +533,26 @@ export default function ConviteVIPPage() {
                     />
                   </div>
 
+                  {/* Botões de Download e Compartilhar */}
+                  <div className="flex justify-center gap-4 mb-6">
+                    <button
+                      onClick={handleDownload}
+                      className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105"
+                      style={{ backgroundColor: dourado, color: marinho }}
+                    >
+                      <Download className="w-5 h-5" />
+                      Salvar QR Code
+                    </button>
+                    <button
+                      onClick={handleShare}
+                      className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 border-2"
+                      style={{ borderColor: dourado, color: dourado }}
+                    >
+                      <Share2 className="w-5 h-5" />
+                      Compartilhar
+                    </button>
+                  </div>
+
                   <div className="p-4 rounded-xl mb-6" style={{ backgroundColor: offWhite }}>
                     <p className="text-sm text-gray-600">
                       <strong>Apresente este QR Code na entrada do evento</strong><br />
@@ -500,7 +561,7 @@ export default function ConviteVIPPage() {
                   </div>
 
                   <p className="text-xs text-gray-400">
-                    Tire um print ou salve esta página. Você também pode mostrar diretamente do celular.
+                    Salve o QR Code ou mostre diretamente do celular na entrada do evento.
                   </p>
                 </div>
               </>
