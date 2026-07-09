@@ -32,8 +32,9 @@ export default function AdminPage() {
       .order('created_at', { ascending: false })
 
     if (error) {
-      console.error('Erro ao buscar convites:', error)
+      console.error('Erro ao buscar convites:', error.message, error.code, error.hint)
     } else {
+      console.log('Convites encontrados:', data)
       setConvites(data || [])
     }
     setLoading(false)
