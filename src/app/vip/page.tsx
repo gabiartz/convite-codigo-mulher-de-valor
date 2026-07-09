@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@supabase/supabase-js'
 import {
   Calendar,
   Clock,
@@ -65,12 +64,6 @@ function useCountdown(targetDate: Date): TimeLeft | null {
 // MAIN COMPONENT
 // ============================================================================
 
-// Supabase client
-const supabase = createClient(
-  'https://ygddgjishoqvotpbvubi.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnZGRnamlzaG9xdW90cGJ2dWJpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0OTY3MTEsImV4cCI6MjA5ODA3MjcxMX0.MjER56cSvjHSHJLyzcSQZwgpu2549NJkCmPno2CnHqs'
-)
-
 export default function ConviteVIPPage() {
   const eventDate = new Date('2026-07-18T09:00:00')
   const timeLeft = useCountdown(eventDate)
@@ -109,14 +102,17 @@ export default function ConviteVIPPage() {
 
     const codigo = `VIP-${Date.now().toString(36).toUpperCase()}`
 
-    // Salvar direto no Supabase (client-side)
+    // Salvar via API route
     try {
-      const { error } = await supabase
-        .from('confirmations')
-        .insert([{ nome, telefone, codigo }])
+      const response = await fetch('/api/convite-vip', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome, telefone, codigo })
+      })
 
-      if (error) {
-        console.error('Erro Supabase:', error.message)
+      if (!response.ok) {
+        const data = await response.json()
+        console.error('Erro ao salvar:', data.error)
       }
     } catch (error) {
       console.error('Erro ao salvar:', error)
